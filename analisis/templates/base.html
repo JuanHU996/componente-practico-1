@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SAG - Calculadora</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+        h1 { font-size: 22px; font-weight: 500; margin-bottom: 0.25rem; }
+        .subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
+        .card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+        label { font-size: 13px; color: #666; display: block; margin-bottom: 6px; }
+        input[type="text"] { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; margin-bottom: 1.25rem; }
+        .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
+        .check-item { display: flex; align-items: center; gap: 8px; background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; padding: 8px 12px; font-size: 14px; }
+        .btn { width: 100%; padding: 11px; background: #534AB7; color: white; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; }
+        .btn:hover { background: #3C3489; }
+        .results { background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.25rem; }
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 1rem; }
+        .result-item { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 12px; }
+        .result-label { font-size: 12px; color: #666; margin-bottom: 4px; }
+        .result-value { font-size: 18px; font-weight: 500; color: #534AB7; }
+        .nums-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+        .num-badge { background: #EEEDFE; color: #3C3489; font-size: 13px; padding: 3px 10px; border-radius: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">+
+    
+    <h1>Calculadora de números</h1>
+    <p class="subtitle">Ingresa números y selecciona las operaciones que deseas calcular</p>
+
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+            <label>Números (separados por espacios)</label>
+            <input type="text" name="numeros" placeholder="Ej: 2 4 6 8 10">
+
+            <label>Selecciona las operaciones</label>
+            <div class="checks">
+                <label class="check-item"><input type="checkbox" name="operaciones" value="suma"> Suma total</label>
+                <label class="check-item"><input type="checkbox" name="operaciones" value="promedio"> Promedio</label>
+                <label class="check-item"><input type="checkbox" name="operaciones" value="mayor"> Número mayor</label>
+                <label class="check-item"><input type="checkbox" name="operaciones" value="menor"> Número menor</label>
+                <label class="check-item"><input type="checkbox" name="operaciones" value="pares"> Números pares</label>
+                <label class="check-item"><input type="checkbox" name="operaciones" value="impares"> Números impares</label>
+                <label class="check-item"><input type="checkbox" name="operaciones" value="cuadrados"> Al cuadrado</label>
+            </div>
+            <button type="submit" class="btn">Calcular</button>
+        </form>
+    </div>
+
+    {% if numeros %}
+    <div class="results">
+        <strong>Resultados</strong>
+        <div class="nums-row">
+            {% for n in numeros %}
+                <span class="num-badge">{{ n }}</span>
+            {% endfor %}
+        </div>
+        <div class="result-grid">
+            {% if suma %}<div class="result-item"><div class="result-label">Suma total</div><div class="result-value">{{ suma }}</div></div>{% endif %}
+            {% if promedio %}<div class="result-item"><div class="result-label">Promedio</div><div class="result-value">{{ promedio|floatformat:2 }}</div></div>{% endif %}
+            {% if mayor %}<div class="result-item"><div class="result-label">Número mayor</div><div class="result-value">{{ mayor }}</div></div>{% endif %}
+            {% if menor %}<div class="result-item"><div class="result-label">Número menor</div><div class="result-value">{{ menor }}</div></div>{% endif %}
+            {% if pares %}<div class="result-item"><div class="result-label">Números pares</div><div class="result-value">{{ pares }}</div></div>{% endif %}
+            {% if impares %}<div class="result-item"><div class="result-label">Números impares</div><div class="result-value">{{ impares }}</div></div>{% endif %}
+            {% if cuadrados %}<div class="result-item"><div class="result-label">Al cuadrado</div><div class="result-value">{{ cuadrados }}</div></div>{% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
